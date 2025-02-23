@@ -1,0 +1,7 @@
+pandas=2.2.2
+weasyprint=63.0
+numpy=1.26.4
+scipy=1.13.1
+pyhrv=0.4.1
+plotly=5.24.1
+biosppy=2.2.2
