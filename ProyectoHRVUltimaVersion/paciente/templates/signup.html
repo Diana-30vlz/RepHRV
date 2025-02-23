@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/stylesSignup.css' %}">
+<div class="container">
+  <h1>Registrar información</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %}
+
+    <div class="container mt-5">
+
+      <!-- Nombre(s) -->
+      <div class="form-group">
+        <label for="nombres">Nombre(s):</label>
+        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ingresa tu(s) nombre(s)" required>
+      </div>
+
+      <!-- Apellido Paterno -->
+      <div class="form-group">
+        <label for="apellido_paterno">Apellido Paterno:</label>
+        <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Ingresa tu apellido paterno" required>
+      </div>
+
+      <!-- Apellido Materno -->
+      <div class="form-group">
+        <label for="apellido_materno">Apellido Materno:</label>
+        <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Ingresa tu apellido materno" required>
+      </div>
+
+      <!-- Departamento -->
+      <div class="form-group">
+        <label for="departamento">Selecciona un departamento:</label>
+        <select class="form-select" id="departamento" name="departamento" required>
+            <option value="">Seleccione un departamento</option> <!-- Opción por defecto -->
+            {% for departamento in departamentos %}
+                <option value="{{ departamento.id_departamento }}">{{ departamento.departamento }}</option>
+            {% endfor %}
+        </select>
+        <small class="form-text text-muted">Selecciona un departamento.</small>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required>
+      </div>
+
+      <!-- Correo Electrónico -->
+      <div class="form-group">
+        <label for="correo">Correo Electrónico:</label>
+        <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required>
+      </div>
+
+
+
+      <!-- Fecha de nacimiento -->
+       <div class="form-group">
+        <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+        <input type="date" class="form-date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Ingresa tu fecha de nacimiento" required>
+       </div>
+
+      <!--Especialidad -->
+      <div class="form-group">
+        <label for="especialidad">Especialidad:</label>
+        <input type="text" class="form-control" id="especialidad" name="especialidad" placeholder="Ingresa tu especialidad" required>
+      </div>
+
+      <!-- Usuario -->
+      <div class="form-group">
+        <label for="username">Usuario:</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="form-group">
+        <label for="password1">Contraseña:</label>
+        <input type="password" class="form-control" id="password1" name="password1" placeholder="Ingresa tu contraseña" required>
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="form-group">
+        <label for="password2">Confirmar Contraseña:</label>
+        <input type="password" class="form-control" id="password2" name="password2" placeholder="Ingresa tu contraseña para confirmar" required>
+      </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Confirmar</button>
+  </form>
+</div>
+
+{% endblock %}

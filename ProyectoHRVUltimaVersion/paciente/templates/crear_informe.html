@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block titulo %} Crear Informe {% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header" style="background-color: #286ffe; color: white;">
+        Crear Informe para Paciente
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Datos del Informe</h4>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ Formulario.as_p }}
+            <button type="submit" class="btn btn-primary" style="background-color: #004b69; color: white;">Guardar Informe</button>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        <!-- Aquí puedes agregar información adicional si es necesario -->
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
