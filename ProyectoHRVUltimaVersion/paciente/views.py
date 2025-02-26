@@ -169,6 +169,29 @@ def pacientes(request):
         pacientes = Paciente.objects.filter(especialista=especialista)
 
     return render(request, 'paciente.html', {"pacientes": pacientes})
+
+
+
+def buscar_registro(request):
+    registro_busqueda = request.GET.get('registro_busqueda', '')  # Captura el parámetro de búsqueda desde la URL
+    paciente = request.user.Paciente  # Obtiene el especialista asociado al usuario actual
+
+    if registro_busqueda:
+        # Filtra pacientes del especialista actual que coincidan con el criterio de búsqueda
+        registro = ECG.objects.filter(
+                Q(registro=registro) &
+            (
+                Q(homoclave__icontains=registro_busqueda) |
+                Q(fecha_informe__icontains=registro_busqueda) |
+                Q(apellido_materno__icontains=registro_busqueda) 
+            )
+        )
+    else:
+        # Si no hay búsqueda, muestra todos los pacientes del especialista actual
+        pacientes = Paciente.objects.filter(paciente=paciente)
+
+    return render(request, 'paciente.html', {"pacientes": pacientes})
+
     
 
 

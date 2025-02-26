@@ -48,22 +48,67 @@
       <!-- Teléfono -->
       <div class="form-group">
         <label for="telefono">Teléfono:</label>
-        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required>
+        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required pattern="\d{10}" title="Debe contener exactamente 10 dígitos" maxlength="10" oninput="this.value = this.value.replace(/\D/g, '')">
       </div>
 
       <!-- Correo Electrónico -->
       <div class="form-group">
         <label for="correo">Correo Electrónico:</label>
         <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required>
+        <small id="emailHelp" class="form-text text-muted">
+          El correo debe contener un `@` y ser un dominio permitido 
+        </small>
+        <div id="emailError" style="color: red; display: none;">
+          <small>Por favor, ingresa un correo electrónico válido.</small>
+        </div>
       </div>
-
+      
+      <script>
+        // Validación del correo electrónico
+        document.getElementById("correo").addEventListener("blur", function() {
+          const email = this.value;
+          const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com|gob\.mx|hotmail\.mx)$/;
+          const emailError = document.getElementById("emailError");
+      
+          if (!regex.test(email)) {
+            emailError.style.display = "block";
+          } else {
+            emailError.style.display = "none";
+          }
+        });
+      </script>
 
 
       <!-- Fecha de nacimiento -->
-       <div class="form-group">
+      <div class="form-group">
         <label for="fecha_nacimiento">Fecha de nacimiento:</label>
         <input type="date" class="form-date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Ingresa tu fecha de nacimiento" required>
-       </div>
+        <small id="edadError" class="form-text text-danger" style="display:none;">Debes ser mayor de 18 años.</small>
+    </div>
+
+
+       <script>
+        document.getElementById('fecha_nacimiento').addEventListener('change', function() {
+            var fechaNacimiento = new Date(this.value);
+            var fechaHoy = new Date();
+            var edad = fechaHoy.getFullYear() - fechaNacimiento.getFullYear()
+            var mes = fechaHoy.getMonth() - fechaNacimiento.getMonth();
+    
+            // Si la fecha de nacimiento aún no ha cumplido 18 años
+            if (mes < 0 || (mes === 0 && fechaHoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+    
+            // Mostrar el mensaje si la edad es menor a 18
+            if (edad < 18) {
+                document.getElementById('edadError').style.display = 'block';
+                document.getElementById('fecha_nacimiento').setCustomValidity('Debes ser mayor de 18 años');
+            } else {
+                document.getElementById('edadError').style.display = 'none';
+                document.getElementById('fecha_nacimiento').setCustomValidity('');
+            }
+        });
+    </script>
 
       <!--Especialidad -->
       <div class="form-group">
@@ -80,13 +125,16 @@
       <!-- Contraseña -->
       <div class="form-group">
         <label for="password1">Contraseña:</label>
-        <input type="password" class="form-control" id="password1" name="password1" placeholder="Ingresa tu contraseña" required>
+        <input type="password" class="form-control" id="password1" name="password1" placeholder="Ingresa tu contraseña" required
+               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).{8,}"
+        <small class="form-text text-muted">Debe contener al menos 8 caracteres, minúsculas, mayusculas, un número y un carácter especial</small>
       </div>
 
       <!-- Confirmar Contraseña -->
       <div class="form-group">
         <label for="password2">Confirmar Contraseña:</label>
         <input type="password" class="form-control" id="password2" name="password2" placeholder="Ingresa tu contraseña para confirmar" required>
+        <small id="passwordError" class="text-danger"></small>
       </div>
 
     </div>
@@ -94,5 +142,21 @@
     <button type="submit" class="btn btn-primary mt-3">Confirmar</button>
   </form>
 </div>
+
+
+<script>
+  function validarContrasena() {
+    var pass1 = document.getElementById("password1").value;
+    var pass2 = document.getElementById("password2").value;
+    var errorMsg = document.getElementById("passwordError");
+    
+    if (pass1 !== pass2) {
+      errorMsg.textContent = "Las contraseñas no coinciden";
+      return false;
+    }
+    errorMsg.textContent = "";
+    return true;
+  }
+</script>
 
 {% endblock %}

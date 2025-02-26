@@ -13,11 +13,11 @@ class Paciente(models.Model):
     nombre_paciente = models.CharField(max_length=45, verbose_name= 'Nombre del paciente', null=False, blank=True)
     apellido_paterno = models.CharField(max_length=45, verbose_name= 'Apellido paterno', null=False, blank=True)
     apellido_materno = models.CharField(max_length=45, verbose_name= 'Apellido materno', null=False, blank=True)
-    telefono = models.CharField(max_length=15, verbose_name= 'Telefono', null=False, blank=True)
+    telefono = models.CharField(max_length=15, verbose_name= 'Telefono', null=True, blank=True)
     correo = models.CharField(max_length=45, verbose_name= 'Correo electrónico', null=False, blank=True)
     sexo = models.CharField(max_length=15, verbose_name= 'Sexo', null=False, blank=True)
-    fecha_nacimiento = models.DateField(verbose_name= 'Fecha Nacimiento', null=False, blank=True)
-    imc = models.FloatField()
+    fecha_nacimiento = models.DateField(verbose_name= 'Fecha Nacimiento', null=True, blank=True)
+    imc = models.FloatField(null = True, blank=True, verbose_name= 'Indice de masa corporal')
     uso_de_medicamentos = models.CharField(max_length=100, null=True, blank=True, verbose_name= 'Medicamentos')  # Nuevo campo
     actividad_fisica = models.CharField(max_length=100, null=True, blank=True, verbose_name= 'Actividad física')      # Nuevo campo
 

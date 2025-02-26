@@ -60,7 +60,7 @@
   <!-- Medicamentos (campo de texto en lugar de opciones) -->
   <div class="form-group">
     <label for="medicamentos">Uso de medicamentos:</label>
-    <input type="text" class="form-control" id="medicamentos" name="uso_de_medicamentos" placeholder="Escribe si usas medicamentos" required>
+    <input type="text" class="form-control" id="medicamentos" name="uso_de_medicamentos" placeholder="Escriba si existe un uso de medicamentos o describa cuales" required>
   </div>
 
 
@@ -69,7 +69,7 @@
     <label>Realiza actividad física:</label><br>
     <div class="checkbox-container">
       <label class="checkbox-label">
-        <input type="checkbox" id="actividad_nulo" name="actividad_fisica" value="nulo">
+        <input type="checkbox" id="actividad_nula" name="actividad_fisica" value="nulo">
         <span class="checkmark"></span>
         Nulo
       </label>
@@ -118,7 +118,6 @@
   </small>
 </div>
 
-
  <!-- Correo Electrónico -->
   <div class="form-group">
     <label for="correo">Correo Electrónico:</label>
@@ -135,7 +134,7 @@
     // Validación del correo electrónico
     document.getElementById("correo").addEventListener("blur", function() {
       const email = this.value;
-      const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com|gob\.mx)$/;
+      const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com|gob\.mx|hotmal\.com)$/;
       const emailError = document.getElementById("emailError");
   
       if (!regex.test(email)) {
@@ -146,10 +145,6 @@
     });
   </script>
 
-
-
-
-
   <!-- Fecha de nacimiento -->
   <div class="form-group">
     <label for="fecha_nacimiento">Fecha de nacimiento:</label>
@@ -159,9 +154,9 @@
   <!-- IMC -->
   <div class="form-group">
     <label for="imc">IMC:</label>
-    <input type="number" class="form-control" id="imc" name="imc" placeholder="Ingrese el IMC" required min="0" max="50">
+    <input type="number" class="form-control" id="imc" name="imc" placeholder="Ingrese el Indice de Masa Corporal" required min="10" max="60">
     <small id="imcHelp" class="form-text text-muted">
-      El IMC debe estar entre 0 y 50.
+      Ingrese un valor de indice corporal con respecto al estándar establecido de la OMS (Organización Mundial de la salud)
     </small>
   </div>
 
