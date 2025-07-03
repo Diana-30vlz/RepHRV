@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'djangocrud.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Motor de base de datos MySQL
-        'NAME': 'senecg2',  # Nombre de la base de datos creada
+        'NAME': 'proyectovfc_hrv_vf',  # Nombre de la base de datos creada
         'USER': 'root',  # Usuario de MySQL
         'PASSWORD': '',  # Contraseña de MySQL (en blanco por defecto)
         'HOST': '127.0.0.1',  # Dirección del servidor MySQL (localhost)
@@ -134,6 +134,7 @@ STATICFILES_DIRS = [  # Cambiado de STATICFILES a STATICFILES_DIRS
 STATIC_ROOT = BASE_DIR / "staticfiles"  # Asegúrate de que esta carpeta exista también.
 
 
+
 LOGIN_URL = '/signin'  # URL de inicio de sesión
 
 
@@ -143,7 +144,8 @@ LOGIN_URL = '/signin'  # URL de inicio de sesión
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'  # Establece el tipo de campo de clave primaria por defecto
 
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'#EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 #EMAIL_PORT = 587
 #EMAIL_USE_TLS = True
 #EMAIL_HOST_USER = 'vlzdiana954@gmail.com'  # Tu correo Gmail
@@ -152,3 +154,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'  # Establece el tipo de cam
 
 INTERNAL_IPS = ['127.0.0.1']
 
+SESSION_COOKIE_AGE = 1200
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True

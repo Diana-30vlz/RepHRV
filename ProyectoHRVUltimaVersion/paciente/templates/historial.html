@@ -43,7 +43,7 @@
                         <div style="display: flex; gap: 15px; justify-content: center; align-items: center; padding: 5px;">
                             <!-- Botón para ver informe completo -->
                             <a class="btn btn-info" href="{% url 'ver_grafico' registro.id_ecg %}" role="button" style="background-color: #1a5edd; color: white;">Informe completo</a>
-
+                            <a class="btn btn-success" href="{% url 'descargar_ecg' registro.id_ecg %}" role="button" style="background-color: #28a745; color: white;">Descargar Archivo</a>
                             <!-- Botón para eliminar informe -->
                             <a class="btn btn-danger" href="{% url 'eliminar_informe' registro.id_ecg %}" onclick="return confirm('¿Estás seguro de eliminar el informe?')" role="button" style="background-color: #de4444; color: white;">Borrar</a>
                         </div>
@@ -95,7 +95,7 @@
                 width++;  // Aumentamos el ancho de la barra
                 progressBar.style.width = width + '%';  // Actualizamos el ancho de la barra
             }
-        }, 100);  // Ajusta el tiempo de cada incremento (milisegundos)
+        }, 1);  // Ajusta el tiempo de cada incremento (milisegundos)
     }
 
     // Variable para almacenar la URL del informe completo

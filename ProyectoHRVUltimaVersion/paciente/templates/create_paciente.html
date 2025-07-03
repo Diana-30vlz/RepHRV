@@ -60,7 +60,7 @@
   <!-- Medicamentos (campo de texto en lugar de opciones) -->
   <div class="form-group">
     <label for="medicamentos">Uso de medicamentos:</label>
-    <input type="text" class="form-control" id="medicamentos" name="uso_de_medicamentos" placeholder="Escriba si existe un uso de medicamentos o describa cuales" required>
+    <input type="text" class="form-control" id="medicamentos" name="uso_de_medicamentos" placeholder="Escriba si existe un uso de medicamentos o describa cuales" >
   </div>
 
 
@@ -112,7 +112,7 @@
  <!-- Teléfono -->
  <div class="form-group">
   <label for="telefono">Teléfono:</label>
-  <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required maxlength="10" pattern="\d{10}">
+  <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" maxlength="10" pattern="\d{10}">
   <small id="telefonoHelp" class="form-text text-muted">
     El número debe tener exactamente 10 dígitos y ser numérico.
   </small>
@@ -151,14 +151,21 @@
     <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required>
   </div>
 
-  <!-- IMC -->
   <div class="form-group">
-    <label for="imc">IMC:</label>
-    <input type="number" class="form-control" id="imc" name="imc" placeholder="Ingrese el Indice de Masa Corporal" required min="10" max="60">
-    <small id="imcHelp" class="form-text text-muted">
-      Ingrese un valor de indice corporal con respecto al estándar establecido de la OMS (Organización Mundial de la salud)
-    </small>
-  </div>
+        <label for="peso">Peso (kg):</label>
+        <input type="number" step="0.1" class="form-control" id="peso" name="peso" placeholder="Ingrese el peso en kilogramos" min="1" max="500" >
+        <small id="pesoHelp" class="form-text text-muted">
+            Ingrese el peso del paciente en kilogramos.
+        </small>
+    </div>
+
+    <div class="form-group">
+        <label for="talla">Talla (m):</label>
+        <input type="number" step="0.01" class="form-control" id="talla" name="talla" placeholder="Ingrese la talla en metros" min="0.5" max="3" >
+        <small id="tallaHelp" class="form-text text-muted">
+            Ingrese la talla del paciente en metros (ej. 1.75).
+        </small>
+    </div>
 
   <button type="submit" class="btn">Guardar</button>  
 </form>

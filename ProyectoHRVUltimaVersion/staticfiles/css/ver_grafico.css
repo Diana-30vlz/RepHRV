@@ -156,6 +156,8 @@ section {
 .histograms .graph-container {
     height: 500px;
     width: 600px;
+    
+
 }
 
 /* Responsive styles */
@@ -231,3 +233,139 @@ button {
         margin-bottom: 10px;
     }
 }
+#loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Animación del corazón */
+.heart {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    transform: rotate(-45deg);
+    animation: heartbeat 1s infinite;
+}
+
+.heart:before,
+.heart:after {
+    content: "";
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart:before {
+    top: -50px;
+    left: 0;
+}
+
+.heart:after {
+    left: 50px;
+    top: 0;
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(-45deg);
+    }
+    100% {
+        transform: scale(1) rotate(-45deg);
+    }
+}
+
+/* Estilo para el texto de carga */
+.loading-text {
+    color: white;
+    font-size: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+        /* Estilos para el contenedor de carga */
+        #loading-overlay {
+        display: none; /* Oculto al cargar la página */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+        /* Animación del corazón */
+        .heart {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: heartbeat 1s infinite;
+        }
+    
+        .heart:before,
+        .heart:after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
+    
+        .heart:before {
+            top: -50px;
+            left: 0;
+        }
+    
+        .heart:after {
+            left: 50px;
+            top: 0;
+        }
+    
+        @keyframes heartbeat {
+            0% {
+                transform: scale(0.6) rotate(-45deg);
+            }
+            50% {
+                transform: scale(0.8) rotate(-45deg);
+            }
+            100% {
+                transform: scale(0.6) rotate(-45deg);
+            }
+        }
+    
+        /* Estilo para el texto de carga */
+        .loading-text {
+            color: white;
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .histograms .graph-container {
+            height: 500px;
+            width: 600px;
+            background: white; /* Fondo blanco sólido o cualquier otro color */
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 100; /* Asegura que el contenido de los histogramas esté por encima */
+        }

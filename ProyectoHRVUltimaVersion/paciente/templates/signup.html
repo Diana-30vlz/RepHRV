@@ -4,159 +4,319 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/stylesSignup.css' %}">
 <div class="container">
-  <h1>Registrar información</h1>
+  <h1>Registrar información</h1>
 
-  {% if error %}
-    <div class="alert alert-danger">{{ error }}</div>
-  {% endif %}
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
 
-  <form action="{% url 'signup' %}" method="POST">
-    {% csrf_token %}
+  <form action="{% url 'signup' %}" method="POST">
+    {% csrf_token %}
 
-    <div class="container mt-5">
+    <div class="container mt-5">
 
-      <!-- Nombre(s) -->
-      <div class="form-group">
-        <label for="nombres">Nombre(s):</label>
-        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ingresa tu(s) nombre(s)" required>
-      </div>
+            <div class="form-group">
+        <label for="nombres">Nombre(s):</label>
+        <input type="text" class="form-control" id="nombres" name="nombres" placeholder="Ingresa tu(s) nombre(s)" required
+              value="{{ nombres|default_if_none:'' }}">       </div>
 
-      <!-- Apellido Paterno -->
-      <div class="form-group">
-        <label for="apellido_paterno">Apellido Paterno:</label>
-        <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Ingresa tu apellido paterno" required>
-      </div>
+            <div class="form-group">
+        <label for="apellido_paterno">Apellido Paterno:</label>
+        <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Ingresa tu apellido paterno" required
+              value="{{ apellido_paterno|default_if_none:'' }}">       </div>
 
-      <!-- Apellido Materno -->
-      <div class="form-group">
-        <label for="apellido_materno">Apellido Materno:</label>
-        <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Ingresa tu apellido materno" required>
-      </div>
+            <div class="form-group">
+        <label for="apellido_materno">Apellido Materno:</label>
+        <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Ingresa tu apellido materno" required
+              value="{{ apellido_materno|default_if_none:'' }}">       </div>
 
-      <!-- Departamento -->
-      <div class="form-group">
-        <label for="departamento">Selecciona un departamento:</label>
-        <select class="form-select" id="departamento" name="departamento" required>
-            <option value="">Seleccione un departamento</option> <!-- Opción por defecto -->
-            {% for departamento in departamentos %}
-                <option value="{{ departamento.id_departamento }}">{{ departamento.departamento }}</option>
-            {% endfor %}
-        </select>
-        <small class="form-text text-muted">Selecciona un departamento.</small>
-      </div>
+            <div class="form-group">
+        <label for="departamento">Selecciona un departamento:</label>
+        <select class="form-select" id="departamento" name="departamento" required>
+            <option value="">Seleccione un departamento</option>             {% for dep in departamentos %}
+                <option value="{{ dep.id_departamento }}" 
+                    {% if dep.id_departamento|stringformat:"s" == departamento_id_selected %} selected {% endif %}> {{ dep.departamento }}
+                </option>
+            {% endfor %}
+        </select>
+        <small class="form-text text-muted">Selecciona un departamento.</small>
+      </div>
 
-      <!-- Teléfono -->
-      <div class="form-group">
-        <label for="telefono">Teléfono:</label>
-        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required pattern="\d{10}" title="Debe contener exactamente 10 dígitos" maxlength="10" oninput="this.value = this.value.replace(/\D/g, '')">
-      </div>
+            <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono" required pattern="\d{10}" title="Debe contener exactamente 10 dígitos" maxlength="10" oninput="this.value = this.value.replace(/\D/g, '')"
+              value="{{ telefono|default_if_none:'' }}">       </div>
+<div class="form-group">
+ <label for="correo">Correo Electrónico:</label>
+  <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required oninput="validarCorreo()"
+        value="{{ correo|default_if_none:'' }}">   <small id="emailHelp" class="form-text text-muted">
+    El correo debe contener un `@` y ser un dominio permitido.
+  </small>
+  <small id="emailError" class="text-danger"></small> 
+  </div>
 
-      <!-- Correo Electrónico -->
-      <div class="form-group">
-        <label for="correo">Correo Electrónico:</label>
-        <input type="email" class="form-control" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required>
-        <small id="emailHelp" class="form-text text-muted">
-          El correo debe contener un `@` y ser un dominio permitido 
-        </small>
-        <div id="emailError" style="color: red; display: none;">
-          <small>Por favor, ingresa un correo electrónico válido.</small>
-        </div>
-      </div>
-      
-      <script>
-        // Validación del correo electrónico
-        document.getElementById("correo").addEventListener("blur", function() {
-          const email = this.value;
-          const regex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|yahoo\.com|gob\.mx|hotmail\.mx)$/;
-          const emailError = document.getElementById("emailError");
-      
-          if (!regex.test(email)) {
-            emailError.style.display = "block";
-          } else {
-            emailError.style.display = "none";
-          }
-        });
-      </script>
+<div class="form-group">
+  <label for="correo2">Confirmar Correo Electrónico:</label>
+  <input type="email" class="form-control" id="correo2" name="correo2" placeholder="Ingresa tu correo para confirmar" required oninput="validarCorreo()"
+        value="{{ correo2|default_if_none:'' }}">   <small id="correoError" class="text-danger"></small>
+</div>
+
+<script>
+  function validarCorreo() {
+    var emailInput = document.getElementById("correo"); // Renombrado para claridad
+    var email = emailInput.value;
+    var email2 = document.getElementById("correo2").value;
+    var emailError = document.getElementById("emailError"); 
+    var correoError = document.getElementById("correoError");
+    var submitBtn = document.getElementById("submitBtn");
+
+    // Expresión regular para validar formato del correo
+    var regexFormato = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var formatoValido = regexFormato.test(email);
+
+    // Lógica para el mensaje de error de formato
+    if (email.length > 0 && !formatoValido) {
+      emailError.textContent = "Por favor, ingresa un correo electrónico válido."; 
+    } else {
+      emailError.textContent = ""; // Borra el mensaje de formato si está vacío o es válido
+    }
+
+    // Si el formato es válido, ahora verifica existencia en la BD (AJAX)
+    if (formatoValido && email.length > 0) { // Solo si el formato es válido y no está vacío
+        // Usamos un pequeño retraso para no saturar el servidor con peticiones
+        // cada vez que el usuario presiona una tecla.
+        clearTimeout(emailInput.dataset.timer); // Limpia el timer anterior
+        emailInput.dataset.timer = setTimeout(function() {
+            fetch(`/verificar_correo_existente/?correo=${encodeURIComponent(email)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.existe) {
+                        emailError.textContent = "Este correo electrónico ya está registrado.";
+                        // Deshabilitar botón si el correo ya existe
+                        submitBtn.disabled = true; 
+                    } else {
+                        // Si el correo no existe, vuelve a ejecutar la validación completa
+                        // para asegurar que las contraseñas y otros campos también sean válidos.
+                        validarFormularioCompleto(); 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al verificar correo:', error);
+                    // Opcional: mostrar un mensaje de error genérico al usuario
+                    // emailError.textContent = "Error al verificar el correo. Intenta de nuevo.";
+                    validarFormularioCompleto(); // Si hay error, asumimos que no hay duplicado para no bloquear
+                });
+        }, 500); // Espera 500ms después de la última pulsación para enviar la petición
+    } else {
+        // Si el formato no es válido o el campo está vacío, asegúrate de validar el resto
+        validarFormularioCompleto(); 
+    }
+
+    // Lógica para validar que los correos de confirmación coincidan
+    // NOTA: Esta parte se ha movido a una nueva función para mejor organización
+    // (ver validarFormularioCompleto más abajo)
+  }
+
+  // Nueva función para validar el resto del formulario (contraseñas, coincidencia de correos, etc.)
+  function validarFormularioCompleto() {
+      var email = document.getElementById("correo").value;
+      var email2 = document.getElementById("correo2").value;
+      var emailError = document.getElementById("emailError"); 
+      var correoError = document.getElementById("correoError");
+      var pass1 = document.getElementById("password1") ? document.getElementById("password1").value : ''; // Asegurarse de que exista
+      var pass2 = document.getElementById("password2") ? document.getElementById("password2").value : ''; // Asegurarse de que exista
+      var passwordError = document.getElementById("passwordError");
+      var requisitosPasswordError = document.getElementById("requisitosPasswordError");
+      var submitBtn = document.getElementById("submitBtn");
+
+      // Validar que los correos coincidan
+      var correosCoinciden = (email === email2 && email2.length > 0);
+      if (email.length > 0 && email2.length > 0 && !correosCoinciden) { 
+        correoError.textContent = "Los correos electrónicos no coinciden";
+      } else if (email.length > 0 && email2.length === 0) {
+        correoError.textContent = "Confirma tu correo electrónico."; 
+      } else {
+        correoError.textContent = "";
+      }
+
+      // Validar requisitos de contraseña (si los campos de contraseña existen)
+      var cumpleRequisitosContrasena = true; // Por defecto true si no hay campos de contraseña
+      if (document.getElementById("password1")) { // Si el campo de contraseña existe
+        var regexRequisitos = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).{8,}$/;
+        cumpleRequisitosContrasena = regexRequisitos.test(pass1);
+
+        if (pass1.length > 0 && !cumpleRequisitosContrasena) {
+          requisitosPasswordError.textContent = "La contraseña no cumple los requisitos requeridos.";
+        } else {
+          requisitosPasswordError.textContent = "";
+        }
+      }
+
+      // Validar que las contraseñas coincidan (si los campos de contraseña existen)
+      var contrasenasCoinciden = true; // Por defecto true si no hay campos de contraseña
+      if (document.getElementById("password1") && document.getElementById("password2")) {
+        contrasenasCoinciden = (pass1 === pass2 && pass2.length > 0);
+        if (pass1.length > 0 && pass2.length > 0 && !contrasenasCoinciden) {
+          passwordError.textContent = "Las contraseñas no coinciden";
+        } else if (pass1.length > 0 && pass2.length === 0) {
+          passwordError.textContent = "Confirma tu contraseña";
+        } else {
+          passwordError.textContent = "";
+        }
+      }
+      
+
+      // Habilitar o deshabilitar el botón de envío
+      // El botón se habilita si:
+      // 1. El correo principal es válido (formatoValido)
+      // 2. El campo principal NO está vacío (email.length > 0)
+      // 3. Los dos correos coinciden (correosCoinciden)
+      // 4. El campo de confirmación de correo NO está vacío (email2.length > 0)
+      // 5. La contraseña cumple requisitos (cumpleRequisitosContrasena)
+      // 6. Las contraseñas coinciden (contrasenasCoinciden)
+      // 7. El campo de contraseña no está vacío (pass1.length > 0)
+      // (Ajusta las condiciones 5,6,7 si los campos de contraseña son opcionales o no existen en este formulario)
+
+      // Para simplificar la lógica del botón, podemos asumir que si un campo de error tiene texto, el formulario no es válido.
+      // Y que todos los campos requeridos tienen algo.
+
+      var hayErrores = (emailError.textContent !== "" || correoError.textContent !== "" || 
+                        requisitosPasswordError.textContent !== "" || passwordError.textContent !== "");
+      
+      var camposRequeridosLlenos = (email.length > 0 && email2.length > 0);
+      if (document.getElementById("password1")) { // Si hay campos de contraseña
+          camposRequeridosLlenos = camposRequeridosLlenos && (pass1.length > 0 && pass2.length > 0);
+      }
+      
+      if (submitBtn) {
+          submitBtn.disabled = (hayErrores || !camposRequeridosLlenos);
+      }
+  }
+
+  // Asegúrate de llamar a validarFormularioCompleto al cargar para el estado inicial del botón
+  document.addEventListener('DOMContentLoaded', validarFormularioCompleto);
+  // Y que los oninput de password1 y password2 llamen a validarFormularioCompleto
+  document.getElementById("password1")?.addEventListener('input', validarFormularioCompleto);
+  document.getElementById("password2")?.addEventListener('input', validarFormularioCompleto);
+
+</script>
 
 
-      <!-- Fecha de nacimiento -->
-      <div class="form-group">
-        <label for="fecha_nacimiento">Fecha de nacimiento:</label>
-        <input type="date" class="form-date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Ingresa tu fecha de nacimiento" required>
-        <small id="edadError" class="form-text text-danger" style="display:none;">Debes ser mayor de 18 años.</small>
-    </div>
+            <div class="form-group">
+        <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+        <input type="date" class="form-date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Ingresa tu fecha de nacimiento" required>
+        <small id="edadError" class="form-text text-danger" style="display:none;">Debes ser mayor de 18 años.</small>
+    </div>
 
 
-       <script>
-        document.getElementById('fecha_nacimiento').addEventListener('change', function() {
-            var fechaNacimiento = new Date(this.value);
-            var fechaHoy = new Date();
-            var edad = fechaHoy.getFullYear() - fechaNacimiento.getFullYear()
-            var mes = fechaHoy.getMonth() - fechaNacimiento.getMonth();
-    
-            // Si la fecha de nacimiento aún no ha cumplido 18 años
-            if (mes < 0 || (mes === 0 && fechaHoy.getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
-    
-            // Mostrar el mensaje si la edad es menor a 18
-            if (edad < 18) {
-                document.getElementById('edadError').style.display = 'block';
-                document.getElementById('fecha_nacimiento').setCustomValidity('Debes ser mayor de 18 años');
-            } else {
-                document.getElementById('edadError').style.display = 'none';
-                document.getElementById('fecha_nacimiento').setCustomValidity('');
-            }
-        });
-    </script>
+       <script>
+        document.getElementById('fecha_nacimiento').addEventListener('change', function() {
+            var fechaNacimiento = new Date(this.value);
+            var fechaHoy = new Date();
+            var edad = fechaHoy.getFullYear() - fechaNacimiento.getFullYear()
+            var mes = fechaHoy.getMonth() - fechaNacimiento.getMonth();
+    
+            // Si la fecha de nacimiento aún no ha cumplido 18 años
+            if (mes < 0 || (mes === 0 && fechaHoy.getDate() < fechaNacimiento.getDate())) {
+                edad--;
+            }
+    
+            // Mostrar el mensaje si la edad es menor a 18
+            if (edad < 18) {
+                document.getElementById('edadError').style.display = 'block';
+                document.getElementById('fecha_nacimiento').setCustomValidity('Debes ser mayor de 18 años');
+            } else {
+                document.getElementById('edadError').style.display = 'none';
+                document.getElementById('fecha_nacimiento').setCustomValidity('');
+            }
+        });
+    </script>
 
-      <!--Especialidad -->
-      <div class="form-group">
-        <label for="especialidad">Especialidad:</label>
-        <input type="text" class="form-control" id="especialidad" name="especialidad" placeholder="Ingresa tu especialidad" required>
-      </div>
+            <div class="form-group">
+        <label for="especialidad">Especialidad:</label>
+        <input type="text" class="form-control" id="especialidad" name="especialidad" placeholder="Ingresa tu especialidad" required>
+      </div>
 
-      <!-- Usuario -->
-      <div class="form-group">
-        <label for="username">Usuario:</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required>
-      </div>
+            <div class="form-group">
+        <label for="username">Usuario:</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required>
+      </div>
 
-      <!-- Contraseña -->
-      <div class="form-group">
-        <label for="password1">Contraseña:</label>
-        <input type="password" class="form-control" id="password1" name="password1" placeholder="Ingresa tu contraseña" required
-               pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).{8,}"
-        <small class="form-text text-muted">Debe contener al menos 8 caracteres, minúsculas, mayusculas, un número y un carácter especial</small>
-      </div>
+          <div class="form-group">
+      <label for="password1">Contraseña:</label>
+      <input type="password" class="form-control" id="password1" name="password1" placeholder="Ingresa tu contraseña" required
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).{8,}" oninput="validarContrasena()">
+      <small class="form-text text-muted">Debe contener al menos 8 caracteres, minúsculas, mayusculas, un número y un carácter especial</small>
+      <br>
+      <small id="requisitosPasswordError" class="text-danger"></small> 
+    </div>
 
-      <!-- Confirmar Contraseña -->
-      <div class="form-group">
-        <label for="password2">Confirmar Contraseña:</label>
-        <input type="password" class="form-control" id="password2" name="password2" placeholder="Ingresa tu contraseña para confirmar" required>
-        <small id="passwordError" class="text-danger"></small>
-      </div>
+    <div class="form-group">
+      <label for="password2">Confirmar Contraseña:</label>
+      <input type="password" class="form-control" id="password2" name="password2" placeholder="Ingresa tu contraseña para confirmar" required oninput="validarContrasena()">
+      <small id="passwordError" class="text-danger"></small>
+    </div>
+    <h1 class="text-center my-4">Registrar información</h1>
 
-    </div>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+      {% endif %}
 
-    <button type="submit" class="btn btn-primary mt-3">Confirmar</button>
-  </form>
+ <script>
+  function validarContrasena() {
+    var pass1 = document.getElementById("password1").value;
+    var pass2 = document.getElementById("password2").value;
+    var passwordError = document.getElementById("passwordError"); // Renombrado de errorMsg para claridad
+    var requisitosPasswordError = document.getElementById("requisitosPasswordError"); // Nuevo elemento de error
+    var submitBtn = document.getElementById("submitBtn");
+
+    // Expresión regular para validar los requisitos de la contraseña
+    // Debe contener al menos 8 caracteres, minúsculas, mayúsculas, un número y un carácter especial
+    var regexRequisitos = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!*]).{8,}$/;
+
+    var cumpleRequisitos = regexRequisitos.test(pass1);
+    
+    // --- Lógica para el mensaje de requisitos de contraseña ---
+    if (pass1.length > 0 && !cumpleRequisitos) {
+      requisitosPasswordError.textContent = "La contraseña no cumple los requisitos requeridos.";
+    } else {
+      requisitosPasswordError.textContent = "";
+    }
+
+    // --- Lógica para el mensaje de coincidencia de contraseñas ---
+    var contrasenasCoinciden = (pass1 === pass2 && pass2.length > 0); // También si pass2 tiene contenido
+
+    if (pass1 !== pass2 && pass2.length > 0) { // No coinciden y se ha escrito en pass2
+      passwordError.textContent = "Las contraseñas no coinciden";
+    } else if (pass1.length > 0 && pass2.length === 0) { // pass1 tiene algo, pass2 está vacío
+      passwordError.textContent = "Confirma tu contraseña";
+    } else {
+      passwordError.textContent = ""; // Coinciden o campos vacíos
+    }
+
+    // --- Lógica para habilitar/deshabilitar el botón de envío ---
+    // El botón se habilita si:
+    // 1. Ambas contraseñas coinciden
+    // 2. Ambas contraseñas no están vacías
+    // 3. La primera contraseña cumple con los requisitos
+    if (submitBtn) {
+      submitBtn.disabled = !(cumpleRequisitos && contrasenasCoinciden && pass1.length > 0);
+    }
+  }
+
+  // Opcional: Ejecutar la validación al cargar la página si ya hay valores (por ejemplo, en un formulario de edición)
+  document.addEventListener('DOMContentLoaded', validarContrasena);
+</script>
+
+    </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary mt-3" disabled>Confirmar</button>
+  </form>
 </div>
 
 
-<script>
-  function validarContrasena() {
-    var pass1 = document.getElementById("password1").value;
-    var pass2 = document.getElementById("password2").value;
-    var errorMsg = document.getElementById("passwordError");
-    
-    if (pass1 !== pass2) {
-      errorMsg.textContent = "Las contraseñas no coinciden";
-      return false;
-    }
-    errorMsg.textContent = "";
-    return true;
-  }
-</script>
+
 
 {% endblock %}

@@ -5,11 +5,13 @@ from django.core.validators import FileExtensionValidator
 import os
 import datetime
 from django.db.models import Max
+import pandas as pd 
+from django.utils import timezone
 # Clase Paciente que representa los datos de un paciente en la base de datos
 
 class Paciente(models.Model):
     id_paciente = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el modelo User
+    #user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el modelo User
     nombre_paciente = models.CharField(max_length=45, verbose_name= 'Nombre del paciente', null=False, blank=True)
     apellido_paterno = models.CharField(max_length=45, verbose_name= 'Apellido paterno', null=False, blank=True)
     apellido_materno = models.CharField(max_length=45, verbose_name= 'Apellido materno', null=False, blank=True)
@@ -17,6 +19,8 @@ class Paciente(models.Model):
     correo = models.CharField(max_length=45, verbose_name= 'Correo electrónico', null=False, blank=True)
     sexo = models.CharField(max_length=15, verbose_name= 'Sexo', null=False, blank=True)
     fecha_nacimiento = models.DateField(verbose_name= 'Fecha Nacimiento', null=True, blank=True)
+    peso = models.FloatField(null = True, blank=True, verbose_name= 'Indice de masa corporal')
+    talla = models.FloatField(null = True, blank=True, verbose_name= 'Indice de masa corporal')
     imc = models.FloatField(null = True, blank=True, verbose_name= 'Indice de masa corporal')
     uso_de_medicamentos = models.CharField(max_length=100, null=True, blank=True, verbose_name= 'Medicamentos')  # Nuevo campo
     actividad_fisica = models.CharField(max_length=100, null=True, blank=True, verbose_name= 'Actividad física')      # Nuevo campo
@@ -25,6 +29,15 @@ class Paciente(models.Model):
     # Relación con Especialista: cada paciente está vinculado a un especialista específico
     especialista = models.ForeignKey('Especialista', on_delete=models.CASCADE, related_name="pacientes")
 
+    def calcular_edad(self):
+        if self.fecha_nacimiento:
+            today = timezone.now().date()
+            edad = today.year - self.fecha_nacimiento.year
+            if today.month < self.fecha_nacimiento.month or (today.month == self.fecha_nacimiento.month and today.day < self.fecha_nacimiento.day):
+                edad -= 1
+            return edad
+        return None
+    
     def generar_id_paciente(self):
         # Obtener el año y mes actual
         current_year = datetime.datetime.now().year
@@ -65,7 +78,7 @@ class Especialista(models.Model):
     apellido_paterno = models.CharField(max_length=100)
     apellido_materno = models.CharField(max_length=100)
     telefono = models.CharField(max_length=15)
-    correo = models.EmailField(max_length=100)
+    correo = models.EmailField(max_length=100, unique=True)
     especialidad = models.CharField(max_length=100)
     fecha_nacimiento = models.DateField(verbose_name= 'Fecha Nacimiento', null=False, blank=True)
     departamento_id = models.ForeignKey(Departamento, on_delete=models.CASCADE)  # Cambiado a ForeignKey
@@ -75,8 +88,7 @@ class Especialista(models.Model):
                 f"Fecha_Naciemiento: {self.fecha_nacimiento}, Teléfono: {self.telefono}, Correo: {self.correo}, "
                 f"Especialidad: {self.especialidad}, Departamento: {self.departamento_id}")
 
-        
- 
+
 class ECG(models.Model):
     id_ecg = models.AutoField(primary_key=True)
     archivo_ecg = models.FileField(upload_to= 'archivo_ecg/', validators=[FileExtensionValidator(allowed_extensions=['txt', 'csv'])])
@@ -84,20 +96,31 @@ class ECG(models.Model):
     comentarios = models.TextField()
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, db_column='id_paciente')
     homoclave = models.CharField(max_length=64, unique=True, blank=True, null=True)  # Nuevo campo para homoclave
+    tipo_archivo = models.CharField(default='ECG', 
+                                    max_length=40,
+                                    choices=[('ECG','Electrocardiograma Digital'), 
+                                             ('TAC','Tacograma')])
 
     def save(self, *args, **kwargs):
-        
-        if not self.homoclave:  # Generar homoclave solo si no existe
-            salt = os.urandom(16)
-            # Usar un hash SHA-256 para generar la homoclave
-            fullhash = hashlib.sha256(salt).hexdigest()
-            self.homoclave = fullhash[:10].upper()
-        #sobreescritura de métodos
-        super().save(*args, **kwargs)  # Llama al método save original
 
-   
+            if self.fecha_informe is None:
+                fecha_y_hora_para_homoclave = timezone.now()
+            else:
+
+                fecha_y_hora_para_homoclave = self.fecha_informe
+
+            # Ahora la lógica para generar la homoclave
+            if not self.homoclave:
+                fecha_formato = fecha_y_hora_para_homoclave.strftime('%y%m%d')
+                hora_formato = fecha_y_hora_para_homoclave.strftime('%H%M%S')
+                prefijo_tipo = self.tipo_archivo
+                self.homoclave = f"{prefijo_tipo}-{fecha_formato}-{hora_formato}"
+
+            super().save(*args, **kwargs) # Llamar al método original
+            
     def __str__(self):
         return f'ECG paciente: {self.paciente.nombre_paciente} {self.paciente.apellido_paterno} {self.paciente.apellido_materno}'
+
  
        
 class AnalisisDominioFrecuencia(models.Model):

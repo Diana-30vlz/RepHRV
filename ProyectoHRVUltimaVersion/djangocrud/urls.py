@@ -39,6 +39,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     
     path('homeDoctor/', views.homeDoctor, name='homeDoctor'),    
+    
     # Ruta para el panel de administración de Django.
     path('admin/', admin.site.urls),
     
@@ -47,12 +48,16 @@ urlpatterns = [
     
     # Ruta para el registro de nuevos usuarios, asignada a la vista 'signup'.
     path('signup/', views.signup, name='signup'),
+
+    path('verificar_correo_existente/', views.verificar_correo_existente, name='verificar_correo_existente'),
     
-    path('signout/', views.signout, name='signout'),
-    
+    path('signout/', views.signout, name='signout'),   
+
+   # path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('forgot_password/', views.forgot_password, name='forgot_password'),
+
     # Ruta para visualizar todos los pacientes, asignada a la vista 'pacientes'.
     path('pacientes/', views.pacientes, name='pacientes'),
-    
     
     # Ruta para crear un nuevo registro de paciente, asignada a la vista 'create_paciente'.
     path('create_paciente/', views.create_paciente, name='create_paciente'),
@@ -61,6 +66,8 @@ urlpatterns = [
     
     # Ruta para ver los detalles de un paciente específico, utilizando el ID del paciente.
     path('pacientes/<int:paciente_id>', views.historial, name='historial'),
+
+    path('pacientes/DescargarECG/<int:ecg_id>', views.descargar_ecg, name='descargar_ecg'),
     
     # Ruta para marcar un paciente como completado, utilizando el ID del paciente.
     path('paciente/<int:paciente_id>/complete', views.complete_paciente, name='complete_paciente'),
@@ -83,7 +90,7 @@ urlpatterns = [
     
     path('pacientes/eliminar_informe/<int:paciente_id>/eliminar',views.eliminar_informe, name='eliminar_informe'),
 
-    path('generar_pdf/', views.generar_pdf, name='generar_pdf'),
+    path('pacientes/generar_pdf/<int:ecg_id>/', views.generar_pdf, name='generar_pdf'),
 
     ]   
 

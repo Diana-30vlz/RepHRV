@@ -15,12 +15,17 @@ class PacienteForm(forms.ModelForm):
             'fecha_nacimiento',
             'uso_de_medicamentos',
             'actividad_fisica',
-            'imc'
+            'peso',
+            'talla'
         ]
         
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'peso': forms.NumberInput(attrs={'placeholder': 'Ingrese el peso en kg'}), # Widget para peso
+            'talla': forms.NumberInput(attrs={'placeholder': 'Ingrese la talla en metros'}), # Widget para talla
         }
+
+        
 
 class DepartamentoForm(forms.ModelForm):
     class Meta:
@@ -45,11 +50,21 @@ class EspecialistaForm(forms.ModelForm):
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
+class PasswordReserForm(forms.ModelForm):
+    class Meta:
+        model = Especialista
+        fields = [
+            'user',
+            'correo'
+        ]
+        widgets = {
+            'correo': forms.EmailInput()
+        }
+        
 class ExpedienteForm(forms.ModelForm):
     class Meta:
         model = ECG
-        fields = ['archivo_ecg', 'comentarios']
+        fields = ['archivo_ecg', 'comentarios', 'tipo_archivo']
         widgets = {
                     'archivo_ecg': forms.FileInput(attrs={'accept': '.txt, .csv'})
                 }
